@@ -62,7 +62,8 @@ make -j$(sysctl -n hw.ncpu)
 > rm -rf build && mkdir build && cd build
 > ```
 >My device config
-![./my_qemu_esp32_setup]
+
+![My config image](./my_qemu_esp32_setup.png)
 
 ## For macs
 ## Step 3.1 — Add to PATH
