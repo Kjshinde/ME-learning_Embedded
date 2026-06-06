@@ -1,0 +1,29 @@
+# ── Build artifacts ──────────────────────────────
+*.o
+*.elf
+*.map
+*.lst
+*.su            # GCC stack usage files
+
+# ── Firmware images (generated, not source) ──────
+*.bin
+*.hex
+*.img
+
+# ── QEMU ─────────────────────────────────────────
+*.qcow2
+
+# ── macOS ─────────────────────────────────────────
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes
+
+# ── Editors ───────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ── Datasheets (large PDFs — download links in docs/datasheets/README.md) ──
+docs/datasheets/*.pdf
