@@ -120,3 +120,53 @@ brew info qemu | head -3
 ```bash
 ==> qemu ✔: stable 11.0.1 (bottled), HEAD
 ```
+
+## Optional — Attaching GDB
+
+Add `-s -S` to your QEMU command:
+
+```bash
+qemu-system-aarch64 \
+  -machine raspi3b \
+  -cpu cortex-a53 \
+  -nographic \
+  -serial mon:stdio \
+  -s -S \
+  -kernel /dev/null
+```
+
+| Flag | What it does |
+| :--- | :--- |
+| `-s` | Opens a GDB server on `localhost:1234` |
+| `-S` | Freezes CPU at startup — waits for GDB before running |
+
+- How to attache it to some other port
+```bash
+# RPi — explicit port (same as -s)
+qemu-system-aarch64 \
+  -machine raspi3b \
+  -cpu cortex-a53 \
+  -nographic \
+  -serial mon:stdio \
+  -gdb tcp::1234 -S \
+  -kernel kernel8.img
+```
+
+Install GDB:
+
+```bash
+brew install aarch64-elf-gdb
+```
+
+Connect in a second terminal:
+
+```bash
+aarch64-elf-gdb
+
+# Inside GDB:
+(gdb) target remote localhost:1234
+(gdb) info registers
+```
+
+> You can test this now with `/dev/null` — the `raspi3b` machine boots and idles,
+> giving GDB a window to connect before any binary runs.

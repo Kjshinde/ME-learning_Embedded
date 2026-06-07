@@ -123,3 +123,84 @@ The reason we want it is so your README records the exact snapshot of the Espres
 
 | Espressif QEMU | 40edccac41 (HEAD -> esp-develop, tag: esp-develop-9.2.2-20260417, origin/esp-develop, origin/HEAD) hw/riscv: fix interrupts being lost or delayed when MIE=0 on the ESP32-C3 |
 | :-- | :-- |
+
+## Optional — Attaching GDB
+
+Add `-gdb tcp::1235 -S` to your QEMU command:
+
+```bash
+~/tools/espressif-qemu/build/qemu-system-xtensa \
+  -machine esp32 \
+  -nographic \
+  -serial mon:stdio \
+  -gdb tcp::1235 -S \
+  -kernel your_binary.elf
+```
+
+| Flag | What it does |
+| :--- | :--- |
+| `-gdb tcp::1235` | Opens GDB server on port `1235` (use `1235` to avoid conflict with RPi on `1234`) |
+| `-S` | Freezes CPU at startup — waits for GDB before running |
+
+> **Note:** Unlike the RPi setup, you cannot test GDB connectivity without a real binary.
+> The ESP32 machine exits immediately if no valid ELF is provided — QEMU is gone
+> before GDB can connect. This section becomes usable in Phase 1 once you have
+> a compiled bare-metal binary.
+
+### Installing xtensa GDB
+
+`brew tap espressif/esp` may ask for GitHub credentials — don't use it.
+The compiler toolchain (`xtensa-esp32-elf-gcc` etc.) does **not** include GDB — it is a separate download.
+
+Download GDB directly from Espressif's releases:
+
+```
+https://github.com/espressif/binutils-gdb/releases
+```
+
+Look for a file with **`xtensa`** in the name for **`aarch64-apple-darwin`**:
+
+```
+xtensa-esp-elf-gdb-*-aarch64-apple-darwin*.tar.gz
+```
+
+> ⚠️ Do NOT download the `riscv32` version — that is for ESP32-C series chips, not the
+> ESP32 Thing (Xtensa LX6).
+
+Extract it:
+
+```bash
+cd ~/tools
+tar -xf xtensa-esp-elf-gdb-*.tar.gz
+```
+
+Add to PATH in `~/.zshrc`:
+
+```bash
+export PATH="$HOME/tools/xtensa-esp-elf-gdb/bin:$PATH"
+```
+
+```bash
+source ~/.zshrc
+```
+
+Verify:
+
+```bash
+xtensa-esp32-elf-gdb --version
+```
+
+Connect in a second terminal:
+
+```bash
+xtensa-esp32-elf-gdb your_binary.elf
+
+# Inside GDB:
+(gdb) target remote localhost:1235
+(gdb) info registers
+```
+
+### My GDB version
+
+| xtensa GDB | `xtensa-esp-elf-gdb-17.1_20260402-aarch64-apple-darwin24.5` |
+| :-- | :-- |
