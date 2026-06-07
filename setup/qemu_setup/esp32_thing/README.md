@@ -109,6 +109,10 @@ qemu-system-xtensa -machine esp32 -nographic -kernel /dev/null
 | expectedWarning: both -bios and -kernel... | Machine has a default ROM, we're overriding with -kernel |
 | could not load ELF file '/dev/null' | /dev/null is not a real ELF binary — expected, we passed it intentionally |
 
+>[!warning] Warning
+> If you install qemu using brew after going through this guid and installing custome qemu for esp32, then make sure you have added the correct path to the ~/.zshrc file from step 3.1 and rerun `source ~/.zshrc` command.
+> Because, homebrew will rewrite the PATH set in step 3.1 so we need to reinitilize the ~/.zshrc file
+
 ## Optional 
 ```bash
 cd ~/tools/espressif-qemu && git log -1 --oneline
