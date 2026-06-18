@@ -20,4 +20,8 @@ Direct register access only.
 - [ ] Phase 4 - Bootloader
 
 _Planned_ — write a custom bootloader for both platforms from scratch.
+
 _Requires_ understanding of the boot process, memory layout, and ELF loading._
+
+# Startup
+- Refere to the [quick_starup_guide](./quick_startup.md) once the setup is done and would quickly want to get started and start writing code.
