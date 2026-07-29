@@ -50,7 +50,3 @@ See [drivers/README.md](./drivers/README.md) for naming and layout conventions.
 4. Consult the [technical references](./docs/references.md) before implementing registers.
 5. Track the planned work in the [implementation plan](./docs/implementation-plan.md).
 
-## Development workflow
-
-Keep `main` as the integrated, working view of all drivers.
-Develop changes on short-lived branches such as `feature/esp32-uart` or `feature/bcm2837-spi`, then merge them into `main` after validation.
