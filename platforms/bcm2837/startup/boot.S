@@ -2,12 +2,12 @@
 .global _start
 
 _start:
-    /* Park cores 1-3 — BCM2837 is quad-core, all start simultaneously */
+    /* Park cores 1-3 - BCM2837 is quad-core, all start simultaneously */
     mrs     x0, mpidr_el1
     and     x0, x0, #0xFF
     cbnz    x0, .park
 
-    /* Set stack pointer — grows down from entry point */
+    /* Set stack pointer - grows down from entry point */
     ldr     x0, =0x80000
     mov     sp, x0
 

@@ -1,24 +1,23 @@
-CROSS   = aarch64-elf
+CROSS   = xtensa-esp32-elf
 CC      = $(CROSS)-gcc
 AS      = $(CROSS)-gcc
 LD      = $(CROSS)-ld
 OBJCOPY = $(CROSS)-objcopy
 
-SHARED   = ../../shared/rpi
-BOOT     = $(SHARED)/boot.S
-LDSCRIPT = $(SHARED)/linker.ld
+PLATFORM = ../../../platforms/esp32
+STARTUP  = $(PLATFORM)/startup
+BOOT     = $(STARTUP)/boot.S
+LDSCRIPT = $(STARTUP)/linker.ld
 
 CFLAGS  = -nostdlib -nostartfiles -ffreestanding -O0 -g
 LDFLAGS = -T $(LDSCRIPT)
 
 OBJS    = boot.o main.o
 TARGET  = uart.elf
-IMG     = kernel8.img
 
-all: $(IMG)
+.PHONY: all clean run debug
 
-$(IMG): $(TARGET)
-	$(OBJCOPY) -O binary $< $@
+all: $(TARGET)
 
 $(TARGET): $(OBJS)
 	$(LD) $(LDFLAGS) -o $@ $^
@@ -30,21 +29,19 @@ main.o: src/main.c
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 clean:
-	rm -f $(OBJS) $(TARGET) $(IMG)
+	rm -f $(OBJS) $(TARGET)
 
 run:
-	qemu-system-aarch64 \
-		-machine raspi3b \
-		-cpu cortex-a53 \
+	~/tools/espressif-qemu/build/qemu-system-xtensa \
+		-machine esp32 \
 		-nographic \
 		-serial mon:stdio \
-		-kernel $(IMG)
+		-kernel $(TARGET)
 
 debug:
-	qemu-system-aarch64 \
-		-machine raspi3b \
-		-cpu cortex-a53 \
+	~/tools/espressif-qemu/build/qemu-system-xtensa \
+		-machine esp32 \
 		-nographic \
 		-serial mon:stdio \
-		-gdb tcp::1234 -S \
-		-kernel $(IMG)
+		-gdb tcp::1235 -S \
+		-kernel $(TARGET)
