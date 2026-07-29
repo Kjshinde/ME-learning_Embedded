@@ -25,5 +25,8 @@
 *.swp
 *.swo
 
-# ── Datasheets (large PDFs — download links in docs/datasheets/README.md) ──
+# ── Datasheets (large PDFs - download links in docs/datasheets/README.md) ──
 docs/datasheets/*.pdf
+
+# Local workstation metadata
+.local/

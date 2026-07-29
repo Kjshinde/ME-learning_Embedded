@@ -10,9 +10,9 @@
 
 ## Prerequisites
 
-- [ ] Homebrew installed — https://brew.sh
+- [ ] Homebrew installed - https://brew.sh
 
-## Step 1 — Install build dependencies
+## Step 1 - Install build dependencies
 
 [Reference for install and building qemu for mac](https://wiki.qemu.org/Hosts/Mac)
 
@@ -21,14 +21,14 @@ brew install glib pkg-config pixman gettext ninja meson python3 libgcrypt
 brew link gettext --force
 ```
 
-> `gettext` is keg-only on macOS — Homebrew won't link it automatically,
+> `gettext` is keg-only on macOS - Homebrew won't link it automatically,
 > the force link makes it findable during the QEMU build.
 
 
 
-## Step 2 — Clone Espressif QEMU
+## Step 2 - Clone Espressif QEMU
 
-Clone outside your repo — this is a build tool, not source code.
+Clone outside your repo - this is a build tool, not source code.
 
 ```bash
 git clone https://github.com/espressif/qemu.git ~/tools/espressif-qemu
@@ -37,7 +37,7 @@ git checkout esp-develop
 ```
 
 
-## Step 3 — Configure and build
+## Step 3 - Configure and build
 
 Build only the Xtensa target to keep the build fast.
 
@@ -61,12 +61,9 @@ make -j$(sysctl -n hw.ncpu)
 > ```bash
 > rm -rf build && mkdir build && cd build
 > ```
->My device config
-
-![My config image](./my_qemu_esp32_setup.png)
 
 ## For macs
-## Step 3.1 — Add to PATH
+## Step 3.1 - Add to PATH
 
 > NOTE :
 >The binary is called qemu-system-xtensa-unsigned. On macOS, QEMU builds an unsigned binary first and expects you to sign it before use. That's a macOS code signing requirement, not a build failure.
@@ -87,7 +84,7 @@ source ~/.zshrc
 ```
 
 
-## Step 4 — Verify
+## Step 4 - Verify
 
 ```bash
 qemu-system-xtensa --version
@@ -107,24 +104,23 @@ qemu-system-xtensa -machine esp32 -nographic -kernel /dev/null
 | :--- | :--- |
 | Not initializing SPI Flash | ESP32 machine started, no flash image provided |
 | expectedWarning: both -bios and -kernel... | Machine has a default ROM, we're overriding with -kernel |
-| could not load ELF file '/dev/null' | /dev/null is not a real ELF binary — expected, we passed it intentionally |
+| could not load ELF file '/dev/null' | /dev/null is not a real ELF binary - expected, we passed it intentionally |
 
 >[!warning] Warning
 > If you install qemu using brew after going through this guid and installing custome qemu for esp32, then make sure you have added the correct path to the ~/.zshrc file from step 3.1 and rerun `source ~/.zshrc` command.
 > Because, homebrew will rewrite the PATH set in step 3.1 so we need to reinitilize the ~/.zshrc file
 
-## Optional 
+## Optional - Record the local QEMU revision
+
 ```bash
-cd ~/tools/espressif-qemu && git log -1 --oneline
+cd ~/tools/espressif-qemu
+git log -1 --oneline
 ```
-The reason we want it is so your README records the exact snapshot of the Espressif QEMU code you built from. esp-develop is a moving branch — someone building it a month from now gets different code. The commit hash pins it:
 
-### My commit hash for library
+Record this output in `.local/tool-versions.md`.
+The `.local/` directory is excluded from Git.
 
-| Espressif QEMU | 40edccac41 (HEAD -> esp-develop, tag: esp-develop-9.2.2-20260417, origin/esp-develop, origin/HEAD) hw/riscv: fix interrupts being lost or delayed when MIE=0 on the ESP32-C3 |
-| :-- | :-- |
-
-## Optional — Attaching GDB
+## Optional - Attaching GDB
 
 Add `-gdb tcp::1235 -S` to your QEMU command:
 
@@ -140,17 +136,17 @@ Add `-gdb tcp::1235 -S` to your QEMU command:
 | Flag | What it does |
 | :--- | :--- |
 | `-gdb tcp::1235` | Opens GDB server on port `1235` (use `1235` to avoid conflict with RPi on `1234`) |
-| `-S` | Freezes CPU at startup — waits for GDB before running |
+| `-S` | Freezes CPU at startup - waits for GDB before running |
 
 > **Note:** Unlike the RPi setup, you cannot test GDB connectivity without a real binary.
-> The ESP32 machine exits immediately if no valid ELF is provided — QEMU is gone
+> The ESP32 machine exits immediately if no valid ELF is provided - QEMU is gone
 > before GDB can connect. This section becomes usable in Phase 1 once you have
 > a compiled bare-metal binary.
 
 ### Installing xtensa GDB
 
-`brew tap espressif/esp` may ask for GitHub credentials — don't use it.
-The compiler toolchain (`xtensa-esp32-elf-gcc` etc.) does **not** include GDB — it is a separate download.
+`brew tap espressif/esp` may ask for GitHub credentials - don't use it.
+The compiler toolchain (`xtensa-esp32-elf-gcc` etc.) does **not** include GDB - it is a separate download.
 
 Download GDB directly from Espressif's releases:
 
@@ -164,7 +160,7 @@ Look for a file with **`xtensa`** in the name for **`aarch64-apple-darwin`**:
 xtensa-esp-elf-gdb-*-aarch64-apple-darwin*.tar.gz
 ```
 
-> ⚠️ Do NOT download the `riscv32` version — that is for ESP32-C series chips, not the
+> ⚠️ Do NOT download the `riscv32` version - that is for ESP32-C series chips, not the
 > ESP32 Thing (Xtensa LX6).
 
 Extract it:
@@ -200,7 +196,5 @@ xtensa-esp32-elf-gdb your_binary.elf
 (gdb) info registers
 ```
 
-### My GDB version
 
-| xtensa GDB | `xtensa-esp-elf-gdb-17.1_20260402-aarch64-apple-darwin24.5` |
-| :-- | :-- |
+Record the installed GDB version in `.local/tool-versions.md`.
