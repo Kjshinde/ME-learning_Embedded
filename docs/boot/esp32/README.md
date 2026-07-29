@@ -4,9 +4,6 @@ Bare minimum to get your own C code running on the ESP32 in QEMU.
 No bootloader knowledge required - just enough to set up the stack,
 enter `main()`, and start writing drivers.
 
-> For a full understanding of the ESP32 boot process and writing your own
-> bootloader from scratch, see [custom bootloader plan](../../custom-bootloader/README.md)
-
 ---
 
 ## References

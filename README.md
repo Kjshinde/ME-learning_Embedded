@@ -23,8 +23,8 @@ The project avoids vendor HALs and prebuilt driver frameworks so each implementa
 │   │   └── startup/
 │   └── esp32/
 │       └── startup/
-├── bootloader/              # Bootloader research and future implementations
 └── docs/                    # Plans, references, setup, and learning guides
+    ├── boot/                # Minimal boot setup guides for driver targets
     └── setup/               # Toolchain, emulator, and debugging setup
 ```
 
@@ -41,14 +41,14 @@ See [drivers/README.md](./drivers/README.md) for naming and layout conventions.
 | Startup and linker scaffolding | Complete | Complete |
 | UART driver | In progress | In progress |
 | GPIO, SPI, I2C, timers, and interrupts | Planned | Planned |
-| Custom bootloader | Planned | Planned |
 
 ## Getting started
 
 1. Follow the [setup guide](./docs/setup/README.md) for your platform.
 2. Use the [quick-start guide](./docs/quick-start.md) to build, run, or debug the current UART targets.
-3. Consult the [technical references](./docs/references.md) before implementing registers.
-4. Track the planned work in the [implementation plan](./docs/implementation-plan.md).
+3. Read the [boot setup guides](./docs/boot/README.md) when you need the minimal startup flow for a driver target.
+4. Consult the [technical references](./docs/references.md) before implementing registers.
+5. Track the planned work in the [implementation plan](./docs/implementation-plan.md).
 
 ## Development workflow
 

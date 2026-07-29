@@ -54,5 +54,5 @@ Always give GDB the ELF file rather than the raw `kernel8.img` image because the
 
 ## Detailed startup guides
 
-- [ESP32 startup guide](../bootloader/quick-setup/esp32/README.MD)
-- [BCM2837 startup guide](../bootloader/quick-setup/bcm2837/README.md)
+- [ESP32 startup guide](./boot/esp32/README.md)
+- [BCM2837 startup guide](./boot/bcm2837/README.md)
