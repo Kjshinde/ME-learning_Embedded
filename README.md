@@ -1,29 +1,56 @@
-# ME-learning_Embedded
+# Bare Metal Drivers
 
-Learning embedded systems from first principles — no HALs, no pre-built drivers.
-Direct register access only.
+Bare-metal peripheral drivers built from first principles with direct register access.
+The project avoids vendor HALs and prebuilt driver frameworks so each implementation exposes the underlying hardware behavior.
 
-## Hardware
-| Board | SoC | Emulated via |
-|---|---|---|
-| Raspberry Pi Zero 2W | BCM2837B0 (Cortex-A53) | QEMU `raspi3b` |
-| SparkFun ESP32 Thing | ESP32 (Xtensa LX6) | Espressif QEMU fork |
+## Supported platforms
 
-## Roadmap
-- [x] Phase 0 — QEMU environment setup (macOS Apple Silicon)
-- [ESP32 QEMU Setup](./setup/qemu/esp32/README.md)
-- [RPi Zero 2W QEMU Setup](./setup/qemu/rpi/README.md)
-- [ ] Phase 1 — UART: RPi Zero 2W ↔ ESP32
-- [ ] Phase 2 — SPI
-- [ ] Phase 2 — I²C
-- [ ] Phase 3 — Bare metal & toolchain from scratch
-- [ ] Phase 4 - Bootloader
+| Platform | Board | Architecture | Emulator |
+| :--- | :--- | :--- | :--- |
+| ESP32 | SparkFun ESP32 Thing | Xtensa LX6 | Espressif QEMU fork |
+| BCM2837 | Raspberry Pi Zero 2 W | Arm Cortex-A53 | QEMU `raspi3b` |
 
-_Planned_ — write a custom bootloader for both platforms from scratch.
+## Repository structure
 
-_Requires_ understanding of the boot process, memory layout, and ELF loading._
+```text
+.
+├── drivers/                 # Drivers grouped by peripheral type
+│   └── uart/
+│       ├── bcm2837/
+│       └── esp32/
+├── platforms/               # Platform startup code and linker scripts
+│   ├── bcm2837/
+│   │   └── startup/
+│   └── esp32/
+│       └── startup/
+├── bootloader/              # Bootloader research and future implementations
+└── docs/                    # Plans, references, setup, and learning guides
+    └── setup/               # Toolchain, emulator, and debugging setup
+```
 
-> Important Docs links can be found in [docs/documentation](./docs/documentaion.md)
+Driver type is the primary grouping so equivalent implementations can be compared across platforms.
+Platform-specific startup code remains separate because it is shared by every driver built for that platform.
 
-# Startup
-- Refere to the [quick_starup_guide](./quick_startup.md) once the setup is done and would quickly want to get started and start writing code.
+See [drivers/README.md](./drivers/README.md) for naming and layout conventions.
+
+## Current status
+
+| Area | ESP32 | BCM2837 |
+| :--- | :---: | :---: |
+| QEMU setup | Complete | Complete |
+| Startup and linker scaffolding | Complete | Complete |
+| UART driver | In progress | In progress |
+| GPIO, SPI, I2C, timers, and interrupts | Planned | Planned |
+| Custom bootloader | Planned | Planned |
+
+## Getting started
+
+1. Follow the [setup guide](./docs/setup/README.md) for your platform.
+2. Use the [quick-start guide](./docs/quick-start.md) to build, run, or debug the current UART targets.
+3. Consult the [technical references](./docs/references.md) before implementing registers.
+4. Track the planned work in the [implementation plan](./docs/implementation-plan.md).
+
+## Development workflow
+
+Keep `main` as the integrated, working view of all drivers.
+Develop changes on short-lived branches such as `feature/esp32-uart` or `feature/bcm2837-spi`, then merge them into `main` after validation.
