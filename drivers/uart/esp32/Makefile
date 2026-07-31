@@ -9,7 +9,7 @@ STARTUP  = $(PLATFORM)/startup
 BOOT     = $(STARTUP)/boot.S
 LDSCRIPT = $(STARTUP)/linker.ld
 
-CFLAGS  = -nostdlib -nostartfiles -ffreestanding -O0 -g
+CFLAGS  = -nostdlib -nostartfiles -ffreestanding -mabi=call0 -O0 -g
 LDFLAGS = -T $(LDSCRIPT)
 
 OBJS    = boot.o main.o
